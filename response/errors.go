@@ -25,3 +25,10 @@ func InternalServerError() (events.APIGatewayProxyResponse, error) {
 		Body:       http.StatusText(http.StatusInternalServerError),
 	}, nil
 }
+
+func Unauthorized() (events.APIGatewayProxyResponse, error) {
+	return events.APIGatewayProxyResponse{
+		StatusCode: http.StatusUnauthorized,
+		Body:       http.StatusText(http.StatusUnauthorized),
+	}, nil
+}

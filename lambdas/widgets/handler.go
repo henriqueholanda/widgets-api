@@ -6,6 +6,14 @@ import (
 	"encoding/json"
 )
 
+// HandlerGetAllWidgets Returns a List of Widgets from database
+// @Title All Widgets Endpoint
+// @Description Returns a List of Widgets from database
+// @Success 200 {array} Widgets "A list of widgets"
+// @Param Authentication header string true "Authentication Token"
+// @Failure 401 {object} string "Unauthorized"
+// @Failure 500 {object} string "Internal Server Error"
+// @router /widgets [get]
 func HandlerGetAllWidgets(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	widgets, err := fetchAll()
 	if err != nil {
@@ -20,6 +28,16 @@ func HandlerGetAllWidgets(req events.APIGatewayProxyRequest) (events.APIGatewayP
 	return response.OkResponse(string(widgetsResponse))
 }
 
+// HandlerGetSingleWidget Returns a Single widget from database
+// @Title Single Widget Endpoint
+// @Description Returns a Single Widget from database
+// @Success 200 {json} Widget "A single widget"
+// @Param id path string true "Widget ID"
+// @Param Authentication header string true "Authentication Token"
+// @Failure 401 {object} string "Unauthorized"
+// @Failure 404 {object} string "Not Found"
+// @Failure 500 {object} string "Internal Server Error"
+// @router /widgets/{id} [get]
 func HandlerGetSingleWidget(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	id := req.PathParameters["id"]
 
@@ -40,6 +58,15 @@ func HandlerGetSingleWidget(req events.APIGatewayProxyRequest) (events.APIGatewa
 	return response.OkResponse(string(widgetResponse))
 }
 
+// HandlerCreateWidget Create a widget on database
+// @Title Create Widget Endpoint
+// @Description Create a widget on database
+// @Success 201 {object} string "Created"
+// @Param widget body Widget true "Widget"
+// @Param Authentication header string true "Authentication Token"
+// @Failure 401 {object} string "Unauthorized"
+// @Failure 500 {object} string "Internal Server Error"
+// @router /widgets [post]
 func HandlerCreateWidget(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	widget := Widget{}
 	err := json.Unmarshal([]byte(req.Body), &widget)
@@ -55,6 +82,16 @@ func HandlerCreateWidget(req events.APIGatewayProxyRequest) (events.APIGatewayPr
 	return response.Created()
 }
 
+// HandlerUpdateWidget Update a widget on database and return itself
+// @Title Update Widget Endpoint
+// @Description Update a widget on database and return itself
+// @Success 200 {json} Widget "A updated widget"
+// @Param id path string true "Widget ID"
+// @Param widget body Widget true "Widget"
+// @Param Authentication header string true "Authentication Token"
+// @Failure 401 {object} string "Unauthorized"
+// @Failure 500 {object} string "Internal Server Error"
+// @router /widgets/{id} [put]
 func HandlerUpdateWidget(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	id := req.PathParameters["id"]
 

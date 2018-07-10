@@ -4,15 +4,42 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 	"regexp"
 	"github.com/aws/aws-lambda-go/events"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/henriqueholanda/widgets-api/response"
 	"github.com/henriqueholanda/widgets-api/lambdas/users"
 	"github.com/henriqueholanda/widgets-api/lambdas/widgets"
+	"strings"
+	"os"
+	"fmt"
 )
 
 const usersEndpoint			= "/users"
 const widgetsEndpoint  		= "/widgets"
 
+func hasValidToken(req events.APIGatewayProxyRequest) (bool) {
+	authHeader := req.Headers["Authorization"]
+	tokenString := strings.Replace(authHeader, "Bearer ", "", 1)
+
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		return []byte(os.Getenv("JWT_TOKEN")), nil
+	})
+
+	if err == nil && token.Valid {
+		return true
+	}
+	if ve, ok := err.(*jwt.ValidationError); ok {
+		fmt.Println("Unauthorized: " + ve.Error())
+		return false
+	}
+
+	return false
+}
+
 func router(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+
+	if !hasValidToken(req) {
+		return response.Unauthorized()
+	}
 
 	if req.HTTPMethod == "GET" {
 		hasUserID, _ := regexp.MatchString(usersEndpoint + "/.+", req.Path)
@@ -56,6 +83,10 @@ func router(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, 
 	return response.MethodNotAllowed()
 }
 
+// @APIVersion 2.0.0
+// @APITitle Widgets API
+// @APIDescription An API to manage Widgets
+// @License Copyright
 func main() {
 	lambda.Start(router)
 }
