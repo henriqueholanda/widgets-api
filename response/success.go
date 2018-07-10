@@ -11,3 +11,10 @@ func OkResponse(body string) (events.APIGatewayProxyResponse, error) {
 		Body:       body,
 	}, nil
 }
+
+func Created() (events.APIGatewayProxyResponse, error) {
+	return events.APIGatewayProxyResponse{
+		StatusCode: http.StatusCreated,
+		Body:       http.StatusText(http.StatusCreated),
+	}, nil
+}
