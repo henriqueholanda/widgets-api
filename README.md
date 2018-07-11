@@ -50,7 +50,15 @@ But if you follow all the steps below the API will work perfectly.
 
 To deploy our application we need to follow some steps. First, we're going to send our application to our Lambda function:
 
-1. Compile your code using:
+1. Download the project dependencies
+ * Install [Golang Dep](https://github.com/golang/dep#installation)
+ * Run the code below:
+    ```
+    # Download all project dependencies
+    $ dep ensure
+    ```
+
+2. Compile your code using:
 
 ```shell
 # Compile the code to linux OS
@@ -60,11 +68,11 @@ $ GOOS=linux go build -o widgets-api widgets-api.go
 $ zip widgets-api.zip widgets-api
 ```
 
-2. Go to your Lambda function at your AWS Console.
-3. In the **Function code** section, upload your `.zip` file and change your Handler to `widgets-api`.
-4. Click in the **Save** button at the top of the page.
+3. Go to your Lambda function at your AWS Console.
+4. In the **Function code** section, upload your `.zip` file and change your Handler to `widgets-api`.
+5. Click in the **Save** button at the top of the page.
 
-5. Now we can test our API: go to the API Gateway we created earlier, select the route `GET /users` and click in the **TEST** icon and a response with an empty array will be returned.
+6. Now we can test our API: go to the API Gateway we created earlier, select the route `GET /users` and click in the **TEST** icon and a response with an empty array will be returned.
 
 To all of our tests you need to put the `Authorization` header before do the test (`Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.t-IDcSemACt8x4iTMCda8Yhe3iZaWbvV5XKSTbuAn0M`)
 
@@ -77,7 +85,7 @@ To have a valid resopnse in this endpoint you need to put these information in t
 }
 ```
 
-Repeat the step `5` and you'll receive a list with this user.
+Repeat the step `6` and you'll receive a list with this user.
 
 To create some widget in the database you can select the `POST /widgets` resource, click in the **TEST** icon and fill the Request body with:
 ```
