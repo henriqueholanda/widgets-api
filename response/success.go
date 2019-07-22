@@ -1,19 +1,20 @@
 package response
 
 import (
-	"github.com/aws/aws-lambda-go/events"
 	"net/http"
+
+	"github.com/henriqueholanda/widgets-api/services"
 )
 
-func OkResponse(body string) (events.APIGatewayProxyResponse, error) {
-	return events.APIGatewayProxyResponse{
+func OkResponse(body string) (services.Response, error) {
+	return services.Response{
 		StatusCode: http.StatusOK,
 		Body:       body,
 	}, nil
 }
 
-func Created() (events.APIGatewayProxyResponse, error) {
-	return events.APIGatewayProxyResponse{
+func Created() (services.Response, error) {
+	return services.Response{
 		StatusCode: http.StatusCreated,
 		Body:       http.StatusText(http.StatusCreated),
 	}, nil

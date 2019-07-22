@@ -1,33 +1,34 @@
 package response
 
 import (
-	"github.com/aws/aws-lambda-go/events"
 	"net/http"
+
+	"github.com/henriqueholanda/widgets-api/services"
 )
 
-func MethodNotAllowed() (events.APIGatewayProxyResponse, error) {
-	return events.APIGatewayProxyResponse{
+func MethodNotAllowed() (services.Response, error) {
+	return services.Response{
 		StatusCode: http.StatusMethodNotAllowed,
 		Body:       http.StatusText(http.StatusMethodNotAllowed),
 	}, nil
 }
 
-func NotFound() (events.APIGatewayProxyResponse, error) {
-	return events.APIGatewayProxyResponse{
+func NotFound() (services.Response, error) {
+	return services.Response{
 		StatusCode: http.StatusNotFound,
 		Body:       http.StatusText(http.StatusNotFound),
 	}, nil
 }
 
-func InternalServerError() (events.APIGatewayProxyResponse, error) {
-	return events.APIGatewayProxyResponse{
+func InternalServerError() (services.Response, error) {
+	return services.Response{
 		StatusCode: http.StatusInternalServerError,
 		Body:       http.StatusText(http.StatusInternalServerError),
 	}, nil
 }
 
-func Unauthorized() (events.APIGatewayProxyResponse, error) {
-	return events.APIGatewayProxyResponse{
+func Unauthorized() (services.Response, error) {
+	return services.Response{
 		StatusCode: http.StatusUnauthorized,
 		Body:       http.StatusText(http.StatusUnauthorized),
 	}, nil

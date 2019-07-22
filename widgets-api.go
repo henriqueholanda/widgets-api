@@ -1,22 +1,22 @@
 package main
 
 import (
+	"fmt"
 	"github.com/aws/aws-lambda-go/lambda"
-	"regexp"
-	"github.com/aws/aws-lambda-go/events"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/henriqueholanda/widgets-api/response"
 	"github.com/henriqueholanda/widgets-api/lambdas/users"
 	"github.com/henriqueholanda/widgets-api/lambdas/widgets"
-	"strings"
+	"github.com/henriqueholanda/widgets-api/response"
+	"github.com/henriqueholanda/widgets-api/services"
 	"os"
-	"fmt"
+	"regexp"
+	"strings"
 )
 
 const usersEndpoint			= "/users"
 const widgetsEndpoint  		= "/widgets"
 
-func hasValidToken(req events.APIGatewayProxyRequest) (bool) {
+func hasValidToken(req services.Request) (bool) {
 	authHeader := req.Headers["Authorization"]
 	tokenString := strings.Replace(authHeader, "Bearer ", "", 1)
 
@@ -35,7 +35,7 @@ func hasValidToken(req events.APIGatewayProxyRequest) (bool) {
 	return false
 }
 
-func router(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func router(req services.Request) (services.Response, error) {
 
 	if !hasValidToken(req) {
 		return response.Unauthorized()

@@ -1,0 +1,17 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.9
+
+    working_directory: /go/src/github.com/henriqueholanda/widgets-api
+    steps:
+      - checkout
+      - run: go get -u github.com/golang/dep/cmd/dep
+      - run: dep ensure -v
+
+  deploy:
+    provider: s3
+    access_key_id: "AKIAIPZYKOLVOTLVHJFQ"
+    secret_access_key: "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"
+    bucket: "widgets-deploys"

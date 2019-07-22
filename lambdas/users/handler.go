@@ -1,10 +1,11 @@
 package users
 
 import (
-	"github.com/aws/aws-lambda-go/events"
-	"fmt"
 	"encoding/json"
+	"fmt"
+
 	"github.com/henriqueholanda/widgets-api/response"
+	"github.com/henriqueholanda/widgets-api/services"
 )
 
 // HandlerGetAllUsers Returns a List of Users from database
@@ -15,7 +16,7 @@ import (
 // @Failure 401 {object} string "Unauthorized"
 // @Failure 500 {object} string "Internal Server Error"
 // @router /users [get]
-func HandlerGetAllUsers(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func HandlerGetAllUsers(req services.Request) (services.Response, error) {
 	users, err := fetchAll()
 	if err != nil {
 		fmt.Println(err)
@@ -41,7 +42,7 @@ func HandlerGetAllUsers(req events.APIGatewayProxyRequest) (events.APIGatewayPro
 // @Failure 404 {object} string "Not Found"
 // @Failure 500 {object} string "Internal Server Error"
 // @router /users/{id} [get]
-func HandlerGetSingleUser(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func HandlerGetSingleUser(req services.Request) (services.Response, error) {
 	id := req.PathParameters["id"]
 
 	user, err := fetchOne(id)

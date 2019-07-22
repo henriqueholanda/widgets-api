@@ -1,9 +1,10 @@
 package widgets
 
 import (
-	"github.com/aws/aws-lambda-go/events"
-	"github.com/henriqueholanda/widgets-api/response"
 	"encoding/json"
+
+	"github.com/henriqueholanda/widgets-api/response"
+	"github.com/henriqueholanda/widgets-api/services"
 )
 
 // HandlerGetAllWidgets Returns a List of Widgets from database
@@ -14,7 +15,7 @@ import (
 // @Failure 401 {object} string "Unauthorized"
 // @Failure 500 {object} string "Internal Server Error"
 // @router /widgets [get]
-func HandlerGetAllWidgets(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func HandlerGetAllWidgets(req services.Request) (services.Response, error) {
 	widgets, err := fetchAll()
 	if err != nil {
 		return response.InternalServerError()
@@ -38,7 +39,7 @@ func HandlerGetAllWidgets(req events.APIGatewayProxyRequest) (events.APIGatewayP
 // @Failure 404 {object} string "Not Found"
 // @Failure 500 {object} string "Internal Server Error"
 // @router /widgets/{id} [get]
-func HandlerGetSingleWidget(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func HandlerGetSingleWidget(req services.Request) (services.Response, error) {
 	id := req.PathParameters["id"]
 
 	widget, err := fetchOne(id)
@@ -67,7 +68,7 @@ func HandlerGetSingleWidget(req events.APIGatewayProxyRequest) (events.APIGatewa
 // @Failure 401 {object} string "Unauthorized"
 // @Failure 500 {object} string "Internal Server Error"
 // @router /widgets [post]
-func HandlerCreateWidget(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func HandlerCreateWidget(req services.Request) (services.Response, error) {
 	widget := Widget{}
 	err := json.Unmarshal([]byte(req.Body), &widget)
 	if err != nil {
@@ -92,7 +93,7 @@ func HandlerCreateWidget(req events.APIGatewayProxyRequest) (events.APIGatewayPr
 // @Failure 401 {object} string "Unauthorized"
 // @Failure 500 {object} string "Internal Server Error"
 // @router /widgets/{id} [put]
-func HandlerUpdateWidget(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func HandlerUpdateWidget(req services.Request) (services.Response, error) {
 	id := req.PathParameters["id"]
 
 	widget, err := fetchOne(id)
