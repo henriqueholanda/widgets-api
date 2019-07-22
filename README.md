@@ -20,7 +20,6 @@ But if you follow all the steps below the API will work perfectly.
 * Create a new role with permission to manage your application: choose **Create new role from template**, give your role a name (`widgets-api-role`) and then choose **Simple Microservice permissions** as the Policy template;
 * In the new page, you need to put these `Environment variables`, then click on `save` button at the top of the page:
     * REGION_AWS (Ex: `us-east-1`)
-    * USERS_TABLE (Ex: `users`)
     * WIDGETS_TABLE (Ex: `widgets`)
     * JWT_TOKEN (Ex: `secret`)
 
@@ -33,12 +32,6 @@ But if you follow all the steps below the API will work perfectly.
 
 * Go to the [API Gateway](https://console.aws.amazon.com/apigateway/home) service and click in the **Get Started** button (If you already have a API Gateway you click in the button **+ Create API**);
 * Choose **New API** in the radio buttons and give you API a name (`WidgetsAPI`), then click in the button **Create API**.
-
-#### Create User Resources
-* In the **Resources** page, click in the resource that was already created for you (`/`), click in **Actions** and select **Create Resource**.
-* Give your resource a name (`Users`) and specify it's path name (`users`).
-* Now click in your `/users` resource and repeat the process: click in the **Actions** button, give it a name (**SingleUser**) and a path name (`{id}`, it's only these part, because it's a child of `/users`, so our resource path is going to be `/users/{id}`).
-* Now, let's create the methods: click in the `/users` resource, click in the **Actions** button, select **Create Method** and choose `GET`. in the method setup, choose **Lambda Function** as the Integration type, check the **Use Lambda Proxy integration** checkbox, choose the Region where your Lambda is and enter its name (`WidgetsAPI`). Repeat this process to create a `GET` method to `/users/{id}`.
 
 #### Create Widgets Resources
 * In the **Resources** page, click in the resource that was already created for you (`/`), click in **Actions** and select **Create Resource**.
@@ -72,20 +65,7 @@ $ zip widgets-api.zip widgets-api
 4. In the **Function code** section, upload your `.zip` file and change your Handler to `widgets-api`.
 5. Click in the **Save** button at the top of the page.
 
-6. Now we can test our API: go to the API Gateway we created earlier, select the route `GET /users` and click in the **TEST** icon and a response with an empty array will be returned.
-
 To all of our tests you need to put the `Authorization` header before do the test (`Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.t-IDcSemACt8x4iTMCda8Yhe3iZaWbvV5XKSTbuAn0M`)
-
-To have a valid resopnse in this endpoint you need to put these information in the `USERS_TABLE` in DynamoDB:
-```
-{
-    "name": "John Doe",
-    "id": 1,
-    "gravatar": "http://www.gravatar.com/avatar/a51972ea936bc3b841350caef34ea47e?s=64&d=monsterid"
-}
-```
-
-Repeat the step `6` and you'll receive a list with this user.
 
 To create some widget in the database you can select the `POST /widgets` resource, click in the **TEST** icon and fill the Request body with:
 ```

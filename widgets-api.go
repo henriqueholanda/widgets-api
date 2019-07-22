@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/henriqueholanda/widgets-api/lambdas/users"
 	"github.com/henriqueholanda/widgets-api/lambdas/widgets"
 	"github.com/henriqueholanda/widgets-api/response"
 	"github.com/henriqueholanda/widgets-api/services"
@@ -13,10 +12,9 @@ import (
 	"strings"
 )
 
-const usersEndpoint			= "/users"
-const widgetsEndpoint  		= "/widgets"
+const widgetsEndpoint = "/widgets"
 
-func hasValidToken(req services.Request) (bool) {
+func hasValidToken(req services.Request) bool {
 	authHeader := req.Headers["Authorization"]
 	tokenString := strings.Replace(authHeader, "Bearer ", "", 1)
 
@@ -42,16 +40,7 @@ func router(req services.Request) (services.Response, error) {
 	}
 
 	if req.HTTPMethod == "GET" {
-		hasUserID, _ := regexp.MatchString(usersEndpoint + "/.+", req.Path)
-		if hasUserID {
-			return users.HandlerGetSingleUser(req)
-		}
-
-		if req.Path == usersEndpoint {
-			return users.HandlerGetAllUsers(req)
-		}
-
-		hasWidgetID, _ := regexp.MatchString(widgetsEndpoint + "/.+", req.Path)
+		hasWidgetID, _ := regexp.MatchString(widgetsEndpoint+"/.+", req.Path)
 		if hasWidgetID {
 			return widgets.HandlerGetSingleWidget(req)
 		}
@@ -72,7 +61,7 @@ func router(req services.Request) (services.Response, error) {
 	}
 
 	if req.HTTPMethod == "PUT" {
-		hasWidgetID, _ := regexp.MatchString(widgetsEndpoint + "/.+", req.Path)
+		hasWidgetID, _ := regexp.MatchString(widgetsEndpoint+"/.+", req.Path)
 		if hasWidgetID {
 			return widgets.HandlerUpdateWidget(req)
 		}

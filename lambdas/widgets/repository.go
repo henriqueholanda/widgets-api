@@ -1,12 +1,12 @@
 package widgets
 
 import (
-	"github.com/aws/aws-sdk-go/service/dynamodb"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
-	"github.com/satori/go.uuid"
 	"fmt"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/henriqueholanda/widgets-api/services"
+	"github.com/satori/go.uuid"
 	"os"
 )
 
@@ -116,7 +116,7 @@ func update(widget Widget) error {
 				S: aws.String(widget.Inventory),
 			},
 		},
-		ReturnValues:     aws.String("UPDATED_NEW"),
+		ReturnValues: aws.String("UPDATED_NEW"),
 		UpdateExpression: aws.String("set " +
 			"#name = :n, " +
 			"color = :c, " +
