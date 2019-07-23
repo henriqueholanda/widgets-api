@@ -15,7 +15,7 @@ import (
 // @Failure 401 {object} string "Unauthorized"
 // @Failure 500 {object} string "Internal Server Error"
 // @router /widgets [get]
-func HandlerGetAllWidgets(req services.Request) (services.Response, error) {
+func HandlerGetAllWidgets(request services.Request) (services.Response, error) {
 	widgets, err := fetchAll()
 	if err != nil {
 		return response.InternalServerError()
@@ -39,8 +39,8 @@ func HandlerGetAllWidgets(req services.Request) (services.Response, error) {
 // @Failure 404 {object} string "Not Found"
 // @Failure 500 {object} string "Internal Server Error"
 // @router /widgets/{id} [get]
-func HandlerGetSingleWidget(req services.Request) (services.Response, error) {
-	id := req.PathParameters["id"]
+func HandlerGetSingleWidget(request services.Request) (services.Response, error) {
+	id := request.PathParameters["id"]
 
 	widget, err := fetchOne(id)
 	if err != nil {
@@ -68,9 +68,9 @@ func HandlerGetSingleWidget(req services.Request) (services.Response, error) {
 // @Failure 401 {object} string "Unauthorized"
 // @Failure 500 {object} string "Internal Server Error"
 // @router /widgets [post]
-func HandlerCreateWidget(req services.Request) (services.Response, error) {
+func HandlerCreateWidget(request services.Request) (services.Response, error) {
 	widget := Widget{}
-	err := json.Unmarshal([]byte(req.Body), &widget)
+	err := json.Unmarshal([]byte(request.Body), &widget)
 	if err != nil {
 		return response.InternalServerError()
 	}
@@ -93,15 +93,15 @@ func HandlerCreateWidget(req services.Request) (services.Response, error) {
 // @Failure 401 {object} string "Unauthorized"
 // @Failure 500 {object} string "Internal Server Error"
 // @router /widgets/{id} [put]
-func HandlerUpdateWidget(req services.Request) (services.Response, error) {
-	id := req.PathParameters["id"]
+func HandlerUpdateWidget(request services.Request) (services.Response, error) {
+	id := request.PathParameters["id"]
 
 	widget, err := fetchOne(id)
 	if err != nil {
 		return response.NotFound()
 	}
 
-	err = json.Unmarshal([]byte(req.Body), &widget)
+	err = json.Unmarshal([]byte(request.Body), &widget)
 	if err != nil {
 		return response.InternalServerError()
 	}

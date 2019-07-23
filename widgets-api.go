@@ -14,8 +14,8 @@ import (
 
 const widgetsEndpoint = "/widgets"
 
-func hasValidToken(req services.Request) bool {
-	authHeader := req.Headers["Authorization"]
+func hasValidToken(request services.Request) bool {
+	authHeader := request.Headers["Authorization"]
 	tokenString := strings.Replace(authHeader, "Bearer ", "", 1)
 
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
@@ -33,43 +33,50 @@ func hasValidToken(req services.Request) bool {
 	return false
 }
 
-func router(req services.Request) (services.Response, error) {
+func router(request services.Request) (services.Response, error) {
 
-	if !hasValidToken(req) {
+	if !hasValidToken(request) {
 		return response.Unauthorized()
 	}
 
-	if req.HTTPMethod == "GET" {
-		hasWidgetID, _ := regexp.MatchString(widgetsEndpoint+"/.+", req.Path)
-		if hasWidgetID {
-			return widgets.HandlerGetSingleWidget(req)
+	if request.HTTPMethod == "GET" {
+		if hasWidgetID(request) {
+			return widgets.HandlerGetSingleWidget(request)
 		}
 
-		if req.Path == widgetsEndpoint {
-			return widgets.HandlerGetAllWidgets(req)
-		}
-
-		return response.NotFound()
-	}
-
-	if req.HTTPMethod == "POST" {
-		if req.Path == widgetsEndpoint {
-			return widgets.HandlerCreateWidget(req)
+		if isWidgetsEndpoint(request) {
+			return widgets.HandlerGetAllWidgets(request)
 		}
 
 		return response.NotFound()
 	}
 
-	if req.HTTPMethod == "PUT" {
-		hasWidgetID, _ := regexp.MatchString(widgetsEndpoint+"/.+", req.Path)
-		if hasWidgetID {
-			return widgets.HandlerUpdateWidget(req)
+	if request.HTTPMethod == "POST" {
+		if isWidgetsEndpoint(request) {
+			return widgets.HandlerCreateWidget(request)
+		}
+
+		return response.NotFound()
+	}
+
+	if request.HTTPMethod == "PUT" {
+		if hasWidgetID(request) {
+			return widgets.HandlerUpdateWidget(request)
 		}
 
 		return response.NotFound()
 	}
 
 	return response.MethodNotAllowed()
+}
+
+func isWidgetsEndpoint(request services.Request) bool {
+	return request.Path == widgetsEndpoint
+}
+
+func hasWidgetID(request services.Request) bool {
+	hasWidgetID, _ := regexp.MatchString(widgetsEndpoint+"/.+", request.Path)
+	return hasWidgetID
 }
 
 // @APIVersion 2.0.0

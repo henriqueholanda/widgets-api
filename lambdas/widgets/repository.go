@@ -11,28 +11,29 @@ import (
 )
 
 func fetchAll() (Widgets, error) {
+	var widgets Widgets
 	scanInput := &dynamodb.ScanInput{
 		TableName: aws.String(os.Getenv("WIDGETS_TABLE")),
 	}
 
 	result, err := services.GetDatabaseSession().Scan(scanInput)
 	if err != nil {
-		return Widgets{}, err
+		return widgets, err
 	}
 	if len(result.Items) == 0 {
-		return Widgets{}, nil
+		return widgets, nil
 	}
 
-	widgets := Widgets{}
 	err = dynamodbattribute.UnmarshalListOfMaps(result.Items, &widgets)
 	if err != nil {
-		return Widgets{}, err
+		return widgets, err
 	}
 
 	return widgets, nil
 }
 
 func fetchOne(id string) (Widget, error) {
+	var widget Widget
 	inputItem := &dynamodb.GetItemInput{
 		TableName: aws.String(os.Getenv("WIDGETS_TABLE")),
 		Key: map[string]*dynamodb.AttributeValue{
@@ -44,16 +45,15 @@ func fetchOne(id string) (Widget, error) {
 
 	result, err := services.GetDatabaseSession().GetItem(inputItem)
 	if err != nil {
-		return Widget{}, err
+		return widget, err
 	}
 	if result.Item == nil {
-		return Widget{}, nil
+		return widget, nil
 	}
 
-	widget := Widget{}
 	err = dynamodbattribute.UnmarshalMap(result.Item, &widget)
 	if err != nil {
-		return Widget{}, err
+		return widget, err
 	}
 
 	return widget, nil
