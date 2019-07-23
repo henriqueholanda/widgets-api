@@ -39,24 +39,20 @@ func router(request services.Request) (services.Response, error) {
 		return response.Unauthorized()
 	}
 
+	if !isWidgetsEndpoint(request) {
+		return response.NotFound()
+	}
+
 	if request.HTTPMethod == "GET" {
 		if hasWidgetID(request) {
 			return widgets.HandlerGetSingleWidget(request)
 		}
 
-		if isWidgetsEndpoint(request) {
-			return widgets.HandlerGetAllWidgets(request)
-		}
-
-		return response.NotFound()
+		return widgets.HandlerGetAllWidgets(request)
 	}
 
 	if request.HTTPMethod == "POST" {
-		if isWidgetsEndpoint(request) {
-			return widgets.HandlerCreateWidget(request)
-		}
-
-		return response.NotFound()
+		return widgets.HandlerCreateWidget(request)
 	}
 
 	if request.HTTPMethod == "PUT" {

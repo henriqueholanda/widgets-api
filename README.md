@@ -55,7 +55,7 @@ To deploy our application we need to follow some steps. First, we're going to se
 
 ```shell
 # Compile the code to linux OS
-$ GOOS=linux go build -o widgets-api widgets-api.go
+$ GOOS=linux go build -o widgets-api main.go
 
 # Compress your executable into a zip file
 $ zip widgets-api.zip widgets-api
