@@ -67,11 +67,12 @@ func router(request services.Request) (services.Response, error) {
 }
 
 func isWidgetsEndpoint(request services.Request) bool {
-	return request.Path == widgetsEndpoint
+	isWidgetsEndpoint, _ := regexp.MatchString(widgetsEndpoint, request.Path)
+	return isWidgetsEndpoint
 }
 
 func hasWidgetID(request services.Request) bool {
-	hasWidgetID, _ := regexp.MatchString(widgetsEndpoint+"/.+", request.Path)
+	hasWidgetID, _ := regexp.MatchString(widgetsEndpoint + "/.+", request.Path)
 	return hasWidgetID
 }
 
