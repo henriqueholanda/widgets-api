@@ -12,7 +12,9 @@ Deploys a Golang API to manage Widgets using Lambda, DynamoDB and API Gateway.
 The initial idea was to use [Terraform](http://terraform.io) to do the deploy of API, but how I'm learning about it, I don't had time do to that. Sorry :/
 But if you follow all the steps below the API will work perfectly.
 
-### Creating the Lambda function
+But for now you can follow the steps below:
+
+### 1 - Creating the Lambda function
 
 * Go to the [Lambda service](https://console.aws.amazon.com/lambda/home);
 * Click in the **Create a function** button, give your function a name (`WidgetsAPI`)
@@ -23,17 +25,17 @@ But if you follow all the steps below the API will work perfectly.
     * WIDGETS_TABLE (Ex: `widgets`)
     * JWT_TOKEN (Ex: `secret`)
 
-### Creating a new DynamoDB table
+### 2 - Creating a new DynamoDB table
 
 * Go to the [DynamoDB service] (https://console.aws.amazon.com/dynamodb/home);
 * You need to click in the `Create table` button to create the two tables that you put in the `Environment variables` of lambda configuration, and put `id` as our primary key.
 
-### Creating a new API Gateway
+### 3 - Creating a new API Gateway
 
 * Go to the [API Gateway](https://console.aws.amazon.com/apigateway/home) service and click in the **Get Started** button (If you already have a API Gateway you click in the button **+ Create API**);
 * Choose **New API** in the radio buttons and give you API a name (`WidgetsAPI`), then click in the button **Create API**.
 
-#### Create Widgets Resources
+#### 4 - Create Widgets Resources (Inside API Gateway)
 * In the **Resources** page, click in the resource that was already created for you (`/`), click in **Actions** and select **Create Resource**.
 * Give your resource a name (`Widgets`) and specify it's path name (`widgets`).
 * Now click in your `/widgets` resource and repeat the process: click in the **Actions** button, give it a name (**SingleWidget**) and a path name (`{id}`, it's only these part, because it's a child of `/widgets`, so our resource path is going to be `/widgets/{id}`).
